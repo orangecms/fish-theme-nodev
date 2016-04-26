@@ -4,15 +4,15 @@
 function __user_host
   set -l content 
   if [ (id -u) = "0" ];
-    echo -n (set_color --bold red)
+    echo -n (set_color --bold white --background red)
   else
-    echo -n (set_color --bold green)
+    echo -n (set_color --bold purple)
   end
   echo -n $USER@(hostname|cut -d . -f 1) (set color normal)
 end
 
 function __current_path
-  echo -n (set_color --bold blue) (pwd) (set_color normal) 
+  echo -n (set_color --bold blue) (pwd)(set_color normal) 
 end
 
 function _git_branch_name
@@ -28,35 +28,27 @@ function __git_status
     set -l git_branch (_git_branch_name)
 
     if [ (_git_is_dirty) ]
-      set git_info '<'$git_branch"*"'>'
+      set git_color red
     else
-      set git_info '<'$git_branch'>'
+      set git_color cyan
     end
 
-    echo -n (set_color yellow) $git_info (set_color normal) 
+    echo -n (set_color $git_color) ‹$git_branch›(set_color normal) 
   end
 end
 
-function __ruby_version
-  if type "rvm-prompt" > /dev/null 2>&1
-    set ruby_version (rvm-prompt i v g)
-  else if type "rbenv" > /dev/null 2>&1
-    set ruby_version (rbenv version-name)
-  else
-    set ruby_version "system"
-  end
-
-  echo -n (set_color red) ‹$ruby_version› (set_color normal)
+function __node_version
+  set node_version (node -v)
+  echo -n (set_color green) ‹node $node_version›(set_color normal)
 end
 
 function fish_prompt
-  echo -n (set_color white)"╭─"(set_color normal)
   __user_host
   __current_path
-  __ruby_version
+  __node_version
   __git_status
   echo -e ''
-  echo (set_color white)"╰─"(set_color --bold white)"\$ "(set_color normal)
+  echo (set_color --bold white)"🐢"(set_color normal)"  " 
 end
 
 function fish_right_prompt
