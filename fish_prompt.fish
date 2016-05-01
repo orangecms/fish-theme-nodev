@@ -39,8 +39,9 @@ end
 
 function __node_version
   set node_version (node -v)
-  set npm_profile (npmrc ls | grep '*')
-  echo -n (set_color green) ‹node $node_version $npm_profile›(set_color normal)
+  set npm_profile ''
+  which npmrc >/dev/null 2>&1; and set npm_profile ' '(npmrc ls | grep '*')
+  echo -n (set_color green) ‹node $node_version$npm_profile›(set_color normal)
 end
 
 function fish_prompt
